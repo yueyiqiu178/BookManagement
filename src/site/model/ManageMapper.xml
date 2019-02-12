@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="site.dao.ManageDao">
+
+<resultMap type="Manage" id="ManageResult">
+<id  property="manageId" column="ManageID" />
+<result property="managePwd" column="ManagePwd" />
+<result property="manageLevel" column="ManageLevel" />
+</resultMap>
+<resultMap type="Student" id="StudentResult">
+<id  property="studentno" column="StudentNO" />
+<result property="password" column="Password" />
+<result property="name" column="Name" />
+<result property="age" column="Age" />
+<result property="gender" column="Gender" />
+<result property="classs" column="Class" />
+<result property="department" column="Department" />
+<result property="permit" column="Permitted" />	
+</resultMap>
+<select id="getManage" parameterType="String" resultMap="ManageResult">
+	select * from manage where ManageID=#{id}
+</select>
+ <select id="verifyManage" parameterType="map" resultType="int" >
+    select count(*) from manage where ManageID=#{id} and ManagePwd=#{pwd}
+</select>
+ <select id="checkManage" parameterType="map" resultType="int" >
+    select count(*) from manage where ManageID=#{id}
+</select>
+ <insert id="addManage" parameterType="map" >
+        	insert into manage (ManageID,ManagePwd) values(#{id},#{pwd})
+        </insert>
+ <update id="updateManage" parameterType="map" >
+        	update manage set ManagePwd=#{pwd} where ManageID=#{id}
+     </update>
+<select id="queryManage"  resultType="map" >
+	select ManageID,ManageLevel from manage
+</select>
+ <select id="countManage" resultType="int" >
+    select count(*) from manage
+</select>
+<delete id="deleteManage" parameterType="map">
+	delete from manage where ManageID=#{id}
+</delete>
+<select id="getStudents" resultMap="StudentResult">
+	select * from student
+</select>
+ <select id="countStu" resultType="int" >
+    select count(*) from student
+</select>
+<select id="getStudentsByNo" parameterType="map" resultMap="StudentResult">
+	select * from student where StudentNO like "%"#{id}"%" 
+</select>
+<select id="countStudentsByNo" parameterType="map" resultType="int" >
+	select count(*) from student where StudentNO like "%"#{id}"%" 
+</select>
+<delete id="deleteStu" parameterType="map">
+	delete from student where StudentNO=#{id}
+</delete>
+ <insert id="addStu" parameterType="map" >
+        	insert into student values(#{id},#{pwd},#{name},#{age},#{gender},#{class},#{dept},#{permit})
+    </insert>
+ <select id="checkStu" resultType="int" parameterType="String">
+    select count(*) from student where StudentNO=#{id}
+</select>
+<select id="getStudent" parameterType="String" resultMap="StudentResult">
+	select * from student where StudentNO=#{id}
+</select>
+<update id="updateStu" parameterType="map" >
+    update student set Name=#{name},Age=#{age},Gender=#{gender},Class=#{class},Department=#{dept},Permitted=#{permit} where StudentNO=#{id}
+</update>
+</mapper>

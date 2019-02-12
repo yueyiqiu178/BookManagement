@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="site.dao.AmercementDao">
+<resultMap type="Amercement" id="AmercementResult">
+<id  property="amerceNO" column="AmerceNO" />
+<result property="detail" column="Detail" />
+<result property="mulct" column="Mulct" />
+<result property="pay" column="Pay" />
+<result property="payTime" column="PayTime" />
+<association property="s" column="StudentNO" select="getStudent"></association>
+<association property="b" column="BorrowNO" select="getBorrow"></association>
+</resultMap>
+<resultMap type="Borrowlist" id="BorrowlistResult">
+<id  property="borrowNo" column="BorrowNO" />
+<result property="startTime" column="StartTime" />
+<result property="endTime" column="End" />
+<result property="XuJie" column="XuJie" />
+<result property="deal" column="Deal" />
+<association property="s" column="StudentNO" select="getStudent"></association>
+<association property="b" column="BookNO" select="getBook"></association>
+</resultMap>
+<resultMap type="Student" id="StudentResult">
+<id  property="studentno" column="StudentNO" />
+<result property="password" column="Password" />
+<result property="name" column="Name" />
+<result property="age" column="Age" />
+<result property="gender" column="Gender" />
+<result property="classs" column="Class" />
+<result property="department" column="Department" />
+<result property="permit" column="Permitted" />	
+</resultMap>
+<resultMap type="Book" id="BookResult">
+<id  property="bookNo" column="BookNO" />
+<result property="bookName" column="BookName" />
+<result property="author" column="Author" />
+<result property="publish" column="Publish" />
+<result property="bookIsbn" column="BookIsbn" />
+<result property="buyTime" column="BuyTime" />
+<result property="bookPrice" column="BookPrice" />
+<result property="bookStatus" column="BookStatus" />
+</resultMap>
+
+
+<select id="getAmercementListByStuid" parameterType="String" resultMap="AmercementResult">
+select * from amercement where StudentNO=#{id} and pay=1
+</select>
+
+<select id="getAmercementListByStuidCount" parameterType="String" resultType="int">
+select count(*) from amercement where StudentNO=#{id} and pay=1
+</select>
+
+<select id="getAmercementSumByStuid" parameterType="String" resultType="double">
+select sum(Mulct) from amercement where StudentNO=#{id}
+</select>
+
+<select id="getAmercementListDebtByStuid" parameterType="String" resultMap="AmercementResult">
+select * from amercement where StudentNO=#{id} and pay=0
+</select>
+
+<select id="getAmercementListDebtByStuidCount" parameterType="String" resultType="int">
+select count(*) from amercement where StudentNO=#{id} and pay=0
+</select>
+
+<select id="getAmercementByAmerceid" parameterType="String" resultMap="AmercementResult">
+select * from amercement where AmerceNO=#{id}
+</select>
+        <select id="getStudent" parameterType="String" resultMap="StudentResult">
+        	select * from student where StudentNO=#{studentNo}
+        </select>
+        <select id="getBook" parameterType="String" resultMap="BookResult">
+select * from book where BookNO=#{no}
+</select>
+<select id="getBorrow" parameterType="String" resultMap="BorrowlistResult">
+select * from borrow_list where BorrowNO=#{no}
+</select>
+<update id="updateAmercement" parameterType="map" >
+    update amercement set Pay=1,PayTime=#{time} where AmerceNO=#{id}
+</update>
+ <insert id="addAmercement" parameterType="map" >
+        	insert into amercement(BorrowNO,StudentNO,Detail,Mulct) 
+        	 values(#{BorrowNO},#{StudentNO},#{Detail},#{Mulct})
+        </insert>
+</mapper>

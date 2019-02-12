@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="site.dao.StudentDao">
+
+<resultMap type="Student" id="StudentResult">
+<id  property="studentno" column="StudentNO" />
+<result property="password" column="Password" />
+<result property="name" column="Name" />
+<result property="age" column="Age" />
+<result property="gender" column="Gender" />
+<result property="classs" column="Class" />
+<result property="department" column="Department" />
+<result property="permit" column="Permitted" />	
+</resultMap>
+
+
+        <select id="getStudent" parameterType="String" resultMap="StudentResult">
+        	select * from student where StudentNO=#{studentNo}
+        </select>
+        <select id="verifyStudent" parameterType="map" resultType="int" >
+        	select count(*) from student where StudentNO=#{studentNo} and Password=#{password}
+        </select>
+        <update id="updateStudentPwd" parameterType="String" >
+        	update student set Password=#{password} where StudentNO=#{studentNo}
+        </update>
+         <select id="queryBooks" parameterType="map" resultType="map" >
+        	select BookNO,BookName,Author,Publish,BookIsbn,
+				  BuyTime,BookPrice,BookStatus from book 
+				  where ${condition} like "%"#{key}"%"		
+        </select>
+        <select id="querySimpleBookCount" parameterType="map" resultType="int" >
+        	select count(*) from book where ${condition} like "%"#{key}"%"
+        </select>
+        <insert id="addOrderList" parameterType="map" useGeneratedKeys="true" keyColumn="OrderNO">
+        	insert into order_list (StudentNO,BookNO) values(#{stdNo},#{bookNO})
+        </insert>
+        <select id="queryBooksCom" parameterType="map" resultType="map" >
+        	select BookNO,BookName,Author,Publish,BookIsbn,
+				  BuyTime,BookPrice,BookStatus from book 
+				  where BookName like "%"#{BookName}"%" and Author like "%"#{Author}"%" and Publish like "%"#{Publish}"%"	
+        </select>
+        <select id="queryComplexBookCount" parameterType="map" resultType="int" >
+        	select count(*) from book where BookName like "%"#{BookName}"%" and Author like "%"#{Author}"%" and Publish like "%"#{Publish}"%"
+        </select>
+         <update id="updatePermit" parameterType="String" >
+        	update student set Permitted=0 where StudentNO=#{studentNo}
+        </update>
+</mapper>

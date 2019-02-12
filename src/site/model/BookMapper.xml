@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="site.dao.BookDao">
+
+<resultMap type="Book" id="BookResult">
+<id  property="bookNo" column="BookNO" />
+<result property="bookName" column="BookName" />
+<result property="author" column="Author" />
+<result property="publish" column="Publish" />
+<result property="bookIsbn" column="BookIsbn" />
+<result property="buyTime" column="BuyTime" />
+<result property="bookPrice" column="BookPrice" />
+<result property="bookStatus" column="BookStatus" />
+</resultMap>
+
+<select id="getBook" parameterType="String" resultMap="BookResult">
+select * from book where BookNO=#{no}
+</select>
+<select id="queryBook"  resultMap="BookResult" >
+	select * from book
+</select>
+ <select id="checkBook" parameterType="map" resultType="int" >
+    select count(*) from book where BookNO=#{id}
+</select>
+ <insert id="addBook" parameterType="map" >
+        	insert into book values(#{bNO},#{bName},#{author},#{publish},#{isbn},#{now},#{price},#{status})
+        </insert>
+         <select id="countBook" resultType="int" >
+    select count(*) from book
+</select>
+<update id="updateBook" parameterType="map" >
+    update book set BookName=#{bName},Author=#{author},Publish=#{publish},BookIsbn=#{isbn},BookPrice=#{price} where BookNO=#{newNO}
+</update>
+         <select id="queryBooksByCondition" parameterType="map" resultMap="BookResult" >
+        	select * from book 
+				  where ${condition} like "%"#{key}"%"		
+        </select>
+                 <select id="queryBooksByConditionCount" parameterType="map" resultType="int" >
+        	select count(*) from book 
+				  where ${condition} like "%"#{key}"%"		
+        </select>
+<delete id="deleteBook" parameterType="map">
+	delete from book where BookNO=#{id}
+</delete>
+<update id="updateBookStatusLost" parameterType="String" >
+    update book set BookStatus=2 where BookNO=(select BookNO from borrow_list where BorrowNO=#{id})
+</update>
+<update id="updateBookStatus" parameterType="String" >
+    update book set BookStatus=1 where BookNO=#{id}
+</update>
+</mapper>

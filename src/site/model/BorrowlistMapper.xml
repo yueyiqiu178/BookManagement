@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="site.dao.BorrowlistDao">
+<resultMap type="Borrowlist" id="BorrowlistResult">
+<id  property="borrowNo" column="BorrowNO" />
+<result property="startTime" column="StartTime" />
+<result property="endTime" column="End" />
+<result property="XuJie" column="XuJie" />
+<result property="deal" column="Deal" />
+<association property="s" column="StudentNO" select="getStudent"></association>
+<association property="b" column="BookNO" select="getBook"></association>
+</resultMap>
+<resultMap type="Student" id="StudentResult">
+<id  property="studentno" column="StudentNO" />
+<result property="password" column="Password" />
+<result property="name" column="Name" />
+<result property="age" column="Age" />
+<result property="gender" column="Gender" />
+<result property="classs" column="Class" />
+<result property="department" column="Department" />
+<result property="permit" column="Permitted" />	
+</resultMap>
+<resultMap type="Book" id="BookResult">
+<id  property="bookNo" column="BookNO" />
+<result property="bookName" column="BookName" />
+<result property="author" column="Author" />
+<result property="publish" column="Publish" />
+<result property="bookIsbn" column="BookIsbn" />
+<result property="buyTime" column="BuyTime" />
+<result property="bookPrice" column="BookPrice" />
+<result property="bookStatus" column="BookStatus" />
+</resultMap>
+<select id="getBorrowlist" parameterType="String" resultMap="BorrowlistResult">
+select * from borrow_list where BorrowNO=#{id}
+</select>
+<select id="getBorrowlistByStuid" parameterType="String" resultMap="BorrowlistResult">
+select * from borrow_list where StudentNO=#{id} and deal=0
+</select>
+<select id="getBorrowlistHistoryByStuid" parameterType="String" resultMap="BorrowlistResult">
+select * from borrow_list where StudentNO=#{id} and deal!=0
+</select>
+<select id="getBorrowlistHistoryByStuidCount" parameterType="String" resultType="int">
+select count(*) from borrow_list where StudentNO=#{id} and deal!=0
+</select>
+<select id="getBorrowlistLostByStuid" parameterType="String" resultMap="BorrowlistResult">
+select * from borrow_list where StudentNO=#{id} and deal=2
+</select>
+<select id="getBorrowlistLostByStuidCount" parameterType="String" resultType="int">
+select count(*) from borrow_list where StudentNO=#{id} and deal=2
+</select>
+<select id="getBorrowlistOrderedCount" parameterType="String" resultType="int">
+
+select count(*)
+from borrow_list
+where BorrowNO=#{id} and exists(
+select *
+from order_list
+where borrow_list.BookNO=order_list.BookNO
+);
+</select>
+
+<update id="updateBorrowlist" parameterType="map" >
+    update borrow_list set XuJie=1,End=#{time} where BorrowNO=#{id}
+</update>
+
+<update id="updateBorrowlistLost" parameterType="String" >
+    update borrow_list set Deal=2 where BorrowNO=#{id}
+</update>
+
+ <insert id="addBorrowlist" parameterType="map" >
+        	insert into borrow_list (StudentNO,BookNO,StartTime,End) values(#{stuno},#{bno},#{start},#{end})
+        </insert>
+        <select id="getStudent" parameterType="String" resultMap="StudentResult">
+        	select * from student where StudentNO=#{studentNo}
+        </select>
+        <select id="getBook" parameterType="String" resultMap="BookResult">
+select * from book where BookNO=#{no}
+</select>
+</mapper>

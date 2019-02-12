@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <typeAliases>  
+        <typeAlias alias="Manage" type="site.model.ManageEntity"/>  
+        <typeAlias alias="Student" type="site.model.StudentEntity"/>
+        <typeAlias alias="Book" type="site.model.BookEntity"/>
+        <typeAlias alias="Borrowlist" type="site.model.BorrowlistEntity"/>
+        <typeAlias alias="Amercement" type="site.model.AmercementEntity"/>
+        <typeAlias alias="Orderlist" type="site.model.OrderlistEntity"/>
+    </typeAliases>  
+    <mappers>  
+        <mapper resource="site/model/ManageMapper.xml" />
+        <mapper resource="site/model/StudentMapper.xml" />
+        <mapper resource="site/model/BookMapper.xml" />
+        <mapper resource="site/model/BorrowlistMapper.xml" />
+        <mapper resource="site/model/AmercementMapper.xml" />
+        <mapper resource="site/model/OrderlistMapper.xml" />
+    </mappers>  
+</configuration>

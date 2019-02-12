@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="site.dao.OrderlistDao">
+<resultMap type="Orderlist" id="OrderlistResult">
+<id property="orderNo" column="OrderNO" />
+<result property="endTime" column="EndTime" />
+<association property="s" column="StudentNO" select="getStudent"></association>
+<association property="b" column="BookNO" select="getBook"></association>
+</resultMap>
+<resultMap type="Student" id="StudentResult">
+<id  property="studentno" column="StudentNO" />
+<result property="password" column="Password" />
+<result property="name" column="Name" />
+<result property="age" column="Age" />
+<result property="gender" column="Gender" />
+<result property="classs" column="Class" />
+<result property="department" column="Department" />
+<result property="permit" column="Permitted" />	
+</resultMap>
+<resultMap type="Book" id="BookResult">
+<id  property="bookNo" column="BookNO" />
+<result property="bookName" column="BookName" />
+<result property="author" column="Author" />
+<result property="publish" column="Publish" />
+<result property="bookIsbn" column="BookIsbn" />
+<result property="buyTime" column="BuyTime" />
+<result property="bookPrice" column="BookPrice" />
+<result property="bookStatus" column="BookStatus" />
+</resultMap>
+<select id="getOrderlist" resultMap="OrderlistResult">
+select * from order_list where EndTime is not null
+</select>
+<select id="getOrderlistCount" resultType="int">
+select count(*) from order_list where EndTime is not null
+</select>
+<select id="getOrderlistByStuno" parameterType="String" resultMap="OrderlistResult">
+select * from order_list where StudentNO=#{id} and EndTime is not null
+</select>
+<select id="getOrderlistByStunoCount" parameterType="String" resultType="int">
+select count(*) from order_list where StudentNO=#{id} and EndTime is not null
+</select>
+<select id="getOrderlistByBno" parameterType="String" resultMap="OrderlistResult">
+select * from order_list where BookNO=#{id}
+</select>
+        <select id="getStudent" parameterType="String" resultMap="StudentResult">
+        	select * from student where StudentNO=#{studentNo}
+        </select>
+
+        <select id="getBook" parameterType="String" resultMap="BookResult">
+select * from book where BookNO=#{no}
+</select>
+
+</mapper>
